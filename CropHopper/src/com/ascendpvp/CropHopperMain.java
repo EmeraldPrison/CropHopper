@@ -2,6 +2,7 @@ package com.ascendpvp;
 
 import java.io.File;
 
+import com.intellectualcrafters.plot.api.PlotAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,7 +18,12 @@ public class CropHopperMain extends JavaPlugin {
 	
 	public FileConfiguration cfg;
 	public File f;
+
+	public static PlotAPI plotAPI;
+
 	public void onEnable() {
+		plotAPI = new PlotAPI();
+
 		Bukkit.getPluginManager().registerEvents(new CactusGrow(this), this);
 		Bukkit.getPluginManager().registerEvents(new HopperPlace(this), this);
 		Bukkit.getPluginManager().registerEvents(new ItemDrop(this), this);
