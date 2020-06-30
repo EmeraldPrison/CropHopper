@@ -5,7 +5,6 @@ hopper_lore:
     - "&bthat drop naturally &3within the chunk &bit's"
     - "&bplaced - instantly!"
     - "&b&m                                      "
-    - "&b&m--------------------------------------
     - "&7❙ &bYou can also &3redirect &bthe items"
     - "&bthis Crop Hopper collects to any other"
     - "&bchest on your plot!"
@@ -13,7 +12,7 @@ hopper_lore:
 messages:
     hopper_already_in_chunk: "&8[&a&lE&2&lP&8] &7There is already a &bCrop Hopper &7active in this chunk."
     hopper_break_success: "&8[&a&lE&2&lP&8] &7You broke a &bCrop Hopper&7."
-    hopper_place_success: "&8[&a&lE&2&lP&8] &7Successfully placed a new &bCrop Hopper&7! &2Right-click a chest &7anywhere to &nredirect contents&7, or &2right-click the Crop Hopper &7to &nkeep default hopper behavior&7!"
+    hopper_place_success: "&8[&a&lE&2&lP&8] &7Successfully placed a new &bCrop Hopper&7! &2Right-click a chest &7anywhere to &bredirect contents&7, or &2right-click the Crop Hopper &7to &bkeep default hopper behavior&7!"
     hopper_place_fail: "&8[&a&lE&2&lP&8] &cYou can only place Crop Hoppers in plots you can build in!"
     hopper_redirect_begin: "&8[&a&lE&2&lP&8] &7Now &bredirecting&7 this Crop Hopper... Click a chest anywhere to set where collected items will go!"
     hopper_redirect_success: "&8[&a&lE&2&lP&8] &aSuccessfully &7set this Crop Hopper's redirect to your &fChest&7! &2Shift & Click &7it to change were it redirects again!"

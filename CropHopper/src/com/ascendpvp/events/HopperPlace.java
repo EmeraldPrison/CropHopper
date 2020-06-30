@@ -23,89 +23,91 @@ import com.ascendpvp.utils.Helpers;
 public class HopperPlace implements Listener {
 
 	CropHopperMain plugin;
-	public HopperPlace(CropHopperMain plugin){
+
+	public HopperPlace(CropHopperMain plugin) {
 		this.plugin = plugin;
 	}
+
 	Helpers help = new Helpers();
 
 	public static Map<UUID, List<Block>> waitingHoppers = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onHopperRedirect(PlayerInteractEvent e){
-		if(e.isCancelled()) return;
+	public void onHopperRedirect(PlayerInteractEvent e) {
+		if (e.isCancelled()) return;
 
 		Player p = e.getPlayer();
 		UUID uuid = p.getUniqueId();
 		Block b = e.getClickedBlock();
 
-		if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && p.isSneaking()){
-			if(b.getType().equals(Material.HOPPER)){
-				Plot plot = CropHopperMain.plotAPI.getPlot(b.getLocation());
-				if(plot != null && plot.isAdded(p.getUniqueId())) {
-					waitingHoppers.putIfAbsent(uuid, new ArrayList<>());
-					if (!waitingHoppers.get(uuid).contains(b)) {
-						waitingHoppers.get(uuid).add(b);
-						e.setCancelled(true);
-						p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_begin")));
-						return;
+		if (b.getType().equals(Material.HOPPER) || b.getType().equals(Material.CHEST) || b.getType().equals(Material.TRAPPED_CHEST)) {
+
+			Plot plot = CropHopperMain.plotAPI.getPlot(b.getLocation());
+			if (plot != null && plot.isAdded(p.getUniqueId())) {
+
+				int hopperX = b.getX();
+				int hopperY = b.getY();
+				int hopperZ = b.getZ();
+
+				int plotCoordX = plot.getId().x;
+				int plotCoordY = plot.getId().y;
+				String plotID = plotCoordX + "," + plotCoordY;
+
+				if(plugin.cfg.get(plotID + ".hopperlocs." + b.getChunk().getX() + b.getChunk().getZ() + ".x") != null) {
+					if (plugin.cfg.get(plotID + ".hopperlocs." + b.getChunk().getX() + b.getChunk().getZ() + ".x").equals(hopperX) && plugin.cfg.get(plotID + ".hopperlocs." + b.getChunk().getX() + b.getChunk().getZ() + ".y").equals(hopperY) && plugin.cfg.get(plotID + ".hopperlocs." + b.getChunk().getX() + b.getChunk().getZ() + ".z").equals(hopperZ)) {
+						if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && p.isSneaking()) {
+							if (b.getType().equals(Material.HOPPER)) {
+								waitingHoppers.putIfAbsent(uuid, new ArrayList<>());
+								if (!waitingHoppers.get(uuid).contains(b)) {
+									waitingHoppers.get(uuid).add(b);
+									e.setCancelled(true);
+									p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_begin")));
+									return;
+								}
+							}
+						}
 					}
-				}else{
-					p.sendMessage(help.cc(plugin.getConfig().getString("messages.no_permission")));
+				}
+
+				if (waitingHoppers.get(uuid) == null || waitingHoppers.get(uuid).size() == 0) {
 					return;
 				}
+
+				if (b == null || (b.getType() != Material.CHEST && b.getType() != Material.TRAPPED_CHEST)) {
+					waitingHoppers.get(uuid).clear();
+					e.setCancelled(true);
+					p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_dont")));
+					return;
+				}
+
+				// check if they can build on the plot of the clicked chest
+
+				for (Block hopper : waitingHoppers.get(uuid)) {
+					int chunkX = hopper.getChunk().getX();
+					int chunkZ = hopper.getChunk().getZ();
+					String hopperSave = String.valueOf(chunkX) + String.valueOf(chunkZ);
+
+					//Set and save values in .yml
+					plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave + "." + "redirect-to" + "." + "x", hopperX);
+					plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave + "." + "redirect-to" + "." + "y", hopperY);
+					plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave + "." + "redirect-to" + "." + "z", hopperZ);
+					plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave + "." + "redirect-to" + "." + "world", b.getWorld().getName());
+				}
+
+				try {
+					plugin.cfg.save(plugin.f);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+
+				waitingHoppers.get(uuid).clear();
+
+				e.setCancelled(true);
+
+				p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_success")));
+			}else{
+				p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_fail")));
 			}
-		}
-
-		if(waitingHoppers.get(uuid) == null || waitingHoppers.get(uuid).size() == 0){
-			return;
-		}
-
-		if(b == null || (b.getType() != Material.CHEST && b.getType() != Material.TRAPPED_CHEST)){
-			waitingHoppers.get(uuid).clear();
-			e.setCancelled(true);
-			p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_dont")));
-			return;
-		}
-
-		Plot plot = CropHopperMain.plotAPI.getPlot(b.getLocation());
-		if(plot != null && plot.isAdded(p.getUniqueId())){
-
-			int hopperX = b.getX();
-			int hopperY = b.getY();
-			int hopperZ = b.getZ();
-
-			int plotCoordX = plot.getId().x;
-			int plotCoordY = plot.getId().y;
-			String plotID = plotCoordX + "," + plotCoordY;
-
-			// check if they can build on the plot of the clicked chest
-
-			for(Block hopper : waitingHoppers.get(uuid)){
-				int chunkX = hopper.getChunk().getX();
-				int chunkZ = hopper.getChunk().getZ();
-				String hopperSave = String.valueOf(chunkX) + String.valueOf(chunkZ);
-
-				//Set and save values in .yml
-				plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave + "." + "redirect-to" + "." + "x", hopperX);
-				plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave + "." + "redirect-to" + "." + "y", hopperY);
-				plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave + "." + "redirect-to" + "." + "z", hopperZ);
-				plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave + "." + "redirect-to" + "." + "world", b.getWorld().getName());
-			}
-
-			try {
-				plugin.cfg.save(plugin.f);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-
-			waitingHoppers.get(uuid).clear();
-
-			e.setCancelled(true);
-
-			p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_success")));
-		}else{
-			e.setCancelled(true);
-			p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_fail")));
 		}
 	}
 

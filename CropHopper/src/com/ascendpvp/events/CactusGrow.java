@@ -45,6 +45,7 @@ public class CactusGrow implements Listener {
 		int spawnX = e.getEntity().getLocation().getChunk().getX();
 		int spawnZ = e.getEntity().getLocation().getChunk().getZ();
 		String hopperSave = String.valueOf(spawnX + String.valueOf(spawnZ));
+
 		//Determine whether or not there is a hopper in the chunk the cactus spawned in
 		if(plugin.cfg.getString(plotID + "." + "hopperlocs." + hopperSave) != null) {
 			//Cancel the ItemSpawnEvent and add a cactus directly into the hopper instead
