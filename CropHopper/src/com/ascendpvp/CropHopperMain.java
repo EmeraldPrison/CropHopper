@@ -29,7 +29,7 @@ public class CropHopperMain extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new ItemDrop(this), this);
 		Bukkit.getPluginManager().registerEvents(new HopperBreak(this), this);
 		getCommand("crophopper").setExecutor(new GiveHopper(this));
-		f = new File("plugins/CropHopper", "hopper_data.yml");
+		f = new File("plugins/EPCropHoppers", "hopper_data.yml");
 		cfg = YamlConfiguration.loadConfiguration(f);
 		saveDefaultConfig();
 	}

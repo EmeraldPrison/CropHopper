@@ -85,7 +85,7 @@ public class HopperBreak implements Listener {
 			if (configX == hopperX && configY == hopperY && configZ == hopperZ) {
 				//Cancel BlockBreakEvent and create CropHopper item
 				ItemStack cropHopper = new ItemStack(Material.HOPPER);
-				help.nameItemLore(cropHopper, help.cc(plugin.getConfig().getString("hopper_name")), help.cc(plugin.getConfig().getString("hopper_lore")));
+				help.nameItemLore(cropHopper, help.cc(plugin.getConfig().getString("hopper_name")), help.cc(plugin.getConfig().getStringList("hopper_lore")));
 				e.setCancelled(true);
 				//Update values in .yml
 				plugin.cfg.set(plotID + "." + "hopperlocs." + hopperSave, null);

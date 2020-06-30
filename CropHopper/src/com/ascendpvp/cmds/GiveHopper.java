@@ -38,7 +38,7 @@ public class GiveHopper implements CommandExecutor {
 		//Give player a custom hopper
 		Player target = Bukkit.getPlayer(args[0]);
 		ItemStack cropHopper = new ItemStack(Material.HOPPER);
-		help.nameItemLore(cropHopper, help.cc(plugin.getConfig().getString("hopper_name")), help.cc(plugin.getConfig().getString("hopper_lore")));
+		help.nameItemLore(cropHopper, help.cc(plugin.getConfig().getString("hopper_name")), help.cc(plugin.getConfig().getStringList("hopper_lore")));
 		target.getInventory().addItem(cropHopper);
 		sender.sendMessage(help.cc(plugin.getConfig().getString("messages.crophopper_success")));
 		target.sendMessage(help.cc(plugin.getConfig().getString("messages.crophopper_given")));		

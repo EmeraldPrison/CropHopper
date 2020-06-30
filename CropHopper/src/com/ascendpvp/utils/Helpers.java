@@ -12,12 +12,19 @@ public class Helpers {
 	public String cc(String s) {
 		return ChatColor.translateAlternateColorCodes('&', s);
 	}
+
+	public List<String> cc(List<String> s) {
+		List<String> colored = new ArrayList<>();
+		for(String l : s){
+			colored.add(ChatColor.translateAlternateColorCodes('&', l));
+		}
+		return colored;
+	}
 	
-	public ItemStack nameItemLore(ItemStack item, String name, String lore) {
+	public ItemStack nameItemLore(ItemStack item, String name, List<String> lore) {
 		ItemMeta meta = item.getItemMeta();
-		List<String> lores = new ArrayList<String>();
 		meta.setDisplayName(name);
-		lores.add(lore);
+		List<String> lores = new ArrayList<>(lore);
 		meta.setLore(lores);
 		item.setItemMeta(meta);
 		return item;

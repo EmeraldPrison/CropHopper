@@ -18,7 +18,7 @@ public class ItemDrop implements Listener {
 	//Event purely to allow players to cactus in a chunk that contains a CropHopper without it instantly sucking it up
 	@EventHandler
 	public void onPlayerDrop(PlayerDropItemEvent e) {
-		if(e.getItemDrop().getItemStack().getType() != Material.CACTUS) return;
+		//if(e.getItemDrop().getItemStack().getType() != Material.CACTUS) return;
 		e.getItemDrop().setCustomName("1337CaCtUs");
 	}
 }
