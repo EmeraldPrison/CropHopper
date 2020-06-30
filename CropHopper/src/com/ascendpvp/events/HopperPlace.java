@@ -107,6 +107,7 @@ public class HopperPlace implements Listener {
 				p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_success")));
 			}else{
 				p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_fail")));
+				waitingHoppers.get(uuid).clear();
 			}
 		}
 	}
