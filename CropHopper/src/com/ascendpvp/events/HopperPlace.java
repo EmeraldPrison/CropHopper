@@ -105,7 +105,7 @@ public class HopperPlace implements Listener {
 				e.setCancelled(true);
 
 				p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_success")));
-			}else{
+			}else if(waitingHoppers.get(uuid) != null && waitingHoppers.get(uuid).size() > 0){
 				p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_redirect_fail")));
 				waitingHoppers.get(uuid).clear();
 			}
