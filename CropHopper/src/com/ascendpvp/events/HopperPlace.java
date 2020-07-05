@@ -3,7 +3,6 @@ package com.ascendpvp.events;
 import java.io.IOException;
 import java.util.*;
 
-import com.intellectualcrafters.plot.api.PlotAPI;
 import com.intellectualcrafters.plot.object.Plot;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
