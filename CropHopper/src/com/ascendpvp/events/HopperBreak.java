@@ -96,7 +96,11 @@ public class HopperBreak implements Listener {
 				}
 
 				if (p.getGameMode() != GameMode.CREATIVE) {
-					e.getBlock().getWorld().dropItem(blockBroke.getLocation(), cropHopper);
+					if(p.getInventory().firstEmpty() == -1) {
+						e.getBlock().getWorld().dropItem(blockBroke.getLocation(), cropHopper);
+					}else{
+						p.getInventory().addItem(cropHopper);
+					}
 				}
 				e.getBlock().setType(Material.AIR);
 				p.sendMessage(help.cc(plugin.getConfig().getString("messages.hopper_break_success")));
